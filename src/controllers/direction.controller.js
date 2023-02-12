@@ -36,7 +36,6 @@ exports.createDirection = async (req, res) => {
 
 exports.updateDirection = async (req, res) => {
     try {
-        console.log('asdfasdfasdf')
         let idD = req.params.idD
         let params = req.body;
         let data = {

@@ -12,8 +12,21 @@ exports.createDirection = async (req, res) => {
             type: params.type
         };
 
+        let directions = await Direction.find()
+
+        for(let direction of directions){
+            if(direction.latitude == data.latitude && direction.longitude == data.longitude){
+                return res.status(400).send({message: 'Ya existe un marcador en esta coordenada'})
+            }
+        }
+
         let direction = new Direction(data);
         await direction.save();
+
+        setTimeout(async() => {
+            await Direction.findOneAndDelete({ _id: direction._id });
+        }, 7200000)
+
         return res.send({ message: 'Ubicación enviada satisfactoriamente', _id: direction._id});
     } catch (err) {
         console.log(err);
@@ -23,6 +36,7 @@ exports.createDirection = async (req, res) => {
 
 exports.updateDirection = async (req, res) => {
     try {
+        console.log('asdfasdfasdf')
         let idD = req.params.idD
         let params = req.body;
         let data = {
